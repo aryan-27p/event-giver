@@ -7,7 +7,16 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { addVolunteer } from '@/lib/store';
 import { CITIES, CAUSES, ID_TYPES, AVAILABILITY, EXPERIENCE_LEVELS } from '@/lib/types';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, CheckCircle2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -15,6 +24,7 @@ export default function RegisterPage() {
     name: '', email: '', phone: '', city: '', cause: '', experience: '', idType: '', idFileName: '',
   });
   const [availability, setAvailability] = useState<string[]>([]);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +38,7 @@ export default function RegisterPage() {
       availability,
       registeredAt: new Date().toISOString(),
     });
-    toast.success('Registration successful! Welcome aboard 🎉');
-    navigate('/events');
+    setShowSuccessDialog(true);
   };
 
   const toggleAvail = (val: string) => {
@@ -125,6 +134,26 @@ export default function RegisterPage() {
           </Button>
         </form>
       </div>
+
+      <AlertDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <AlertDialogContent className="sm:max-w-md text-center">
+          <AlertDialogHeader>
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+              <CheckCircle2 className="h-10 w-10" />
+            </div>
+            <AlertDialogTitle className="text-2xl text-center">Registration Successful!</AlertDialogTitle>
+            <AlertDialogDescription className="text-center text-base">
+              Welcome aboard, <strong>{form.name}</strong>! 🎉 You are now registered as a volunteer. 
+              You can now browse and join upcoming events in your area.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="sm:justify-center mt-4">
+            <AlertDialogAction onClick={() => navigate('/events')} className="w-full sm:w-auto">
+              Continue to Events
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

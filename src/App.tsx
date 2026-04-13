@@ -10,6 +10,7 @@ import EventsPage from "./pages/EventsPage";
 import HistoryPage from "./pages/HistoryPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
+import SqlViewer from "./pages/SqlViewer";
 import { seedEvents } from "./lib/store";
 
 seedEvents();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/events" element={<EventsPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/sql-viewer" element={<SqlViewer />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -32,9 +32,16 @@ export interface EventRegistration {
 }
 
 export const CITIES = [
-  "New York", "Los Angeles", "Chicago", "Houston", "Phoenix",
-  "Philadelphia", "San Antonio", "San Diego", "Dallas", "Mumbai",
-  "Delhi", "Bangalore", "London", "Toronto", "Sydney",
+  "Mumbai",
+  "Pune",
+  "Nagpur",
+  "Nashik",
+  "Thane",
+  "Aurangabad",
+  "Navi Mumbai",
+  "Solapur",
+  "Kolhapur",
+  "Amravati",
 ];
 
 export const CAUSES = [
