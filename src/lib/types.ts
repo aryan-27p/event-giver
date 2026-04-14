@@ -18,6 +18,7 @@ export interface VolunteerEvent {
   description: string;
   location: string;
   cause: string;
+  organizerName: string;
   eventDate: string;
   registrationDeadline: string;
   createdAt: string;
@@ -61,3 +62,12 @@ export const AVAILABILITY = [
 export const EXPERIENCE_LEVELS = [
   "No Experience", "Beginner (< 1 year)", "Intermediate (1-3 years)", "Expert (3+ years)",
 ];
+
+export interface EventFeedback {
+  id: string;
+  eventId: string;
+  volunteerId: string;
+  rating: number;
+  comment: string;
+  submittedAt: string;
+}

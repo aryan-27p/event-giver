@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { getUpcomingEvents, getVolunteers, addRegistration, isVolunteerRegistered } from '@/lib/store';
 import type { VolunteerEvent, Volunteer } from '@/lib/types';
-import { Calendar, MapPin, Tag, Clock, Users, CheckCircle2, Download } from 'lucide-react';
+import { Calendar, MapPin, Tag, Clock, Users, CheckCircle2, Download, Building } from 'lucide-react';
 import { jsPDF } from "jspdf";
 import {
   AlertDialog,
@@ -103,6 +103,9 @@ export default function EventsPage() {
                   <h3 className="mb-2 font-heading text-lg font-bold text-foreground">{evt.name}</h3>
                   <p className="mb-4 flex-1 text-sm leading-relaxed text-muted-foreground">{evt.description}</p>
                   <div className="space-y-2 text-sm text-muted-foreground">
+                    {evt.organizerName && (
+                      <div className="flex items-center gap-2"><Building className="h-4 w-4 text-primary" />Org: {evt.organizerName}</div>
+                    )}
                     <div className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" />{evt.location}</div>
                     <div className="flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" />Event: {fmt(evt.eventDate)}</div>
                     <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-secondary" />Deadline: {fmt(evt.registrationDeadline)}</div>
@@ -127,6 +130,7 @@ export default function EventsPage() {
                 <p><strong>Name:</strong> {currentVolunteer?.name}</p>
                 <p><strong>Volunteer No:</strong> {currentVolunteer?.id.substring(0, 8).toUpperCase()}</p>
                 <p><strong>Event:</strong> {joinedEvent?.name}</p>
+                <p><strong>Organizer:</strong> {joinedEvent?.organizerName}</p>
                 <p><strong>Time:</strong> {joinedEvent ? fmt(joinedEvent.eventDate) : ''}</p>
                 <p><strong>Place:</strong> {joinedEvent?.location}</p>
               </AlertDialogDescription>

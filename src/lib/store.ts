@@ -1,4 +1,4 @@
-import { Volunteer, VolunteerEvent, EventRegistration } from './types';
+import { Volunteer, VolunteerEvent, EventRegistration, EventFeedback } from './types';
 
 const VOLUNTEERS_KEY = 'vc_volunteers';
 const EVENTS_KEY = 'vc_events';
@@ -62,10 +62,24 @@ export const markCertificateGenerated = (registrationId: string) => {
   if (idx >= 0) { all[idx].certificateGenerated = true; set(REGISTRATIONS_KEY, all); }
 };
 
+// Feedback
+const FEEDBACK_KEY = 'vc_feedback';
+export const getFeedback = () => get<EventFeedback>(FEEDBACK_KEY);
+export const addFeedback = (f: EventFeedback) => {
+  const all = getFeedback();
+  all.push(f);
+  set(FEEDBACK_KEY, all);
+  fetch('http://localhost:3000/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(f) }).catch(console.error);
+};
+export const getFeedbackForEvent = (eventId: string) => getFeedback().filter(f => f.eventId === eventId);
+export const hasVolunteerRatedEvent = (volunteerId: string, eventId: string) => {
+  return getFeedback().some(f => f.volunteerId === volunteerId && f.eventId === eventId);
+};
+
 // Seed initial events if empty
 export const seedEvents = () => {
   const now = new Date();
-  const seedEvents: VolunteerEvent[] = [
+  const seedData: any[] = [
     {
       id: 'evt-1', name: 'Juhu Beach Cleanup Drive', description: 'Join us at Juhu Beach for a cleanup to protect marine life and keep Mumbai\'s shores pristine.',
       location: 'Juhu Beach, Mumbai, Maharashtra', cause: 'Environment', eventDate: new Date(now.getTime() + 14 * 86400000).toISOString(),
@@ -142,6 +156,7 @@ export const seedEvents = () => {
       registrationDeadline: new Date(now.getTime() - 6 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 20 * 86400000).toISOString(),
     },
   ];
+  const seedEvents: VolunteerEvent[] = seedData.map(e => ({ ...e, organizerName: 'Volunteer Connect' as string }));
 
   const existing = getEvents();
 
@@ -152,7 +167,7 @@ export const seedEvents = () => {
   }
 
   // Merge seed events into existing ones (update defaults, keep custom events)
-  const byId = new Map<string, VolunteerEvent>(existing.map((e) => [e.id, e]));
+  const byId = new Map<string, VolunteerEvent>(existing.map((e) => [e.id, { ...e, organizerName: e.organizerName || 'Volunteer Connect' }]));
 
   for (const evt of seedEvents) {
     const current = byId.get(evt.id);
@@ -166,4 +181,39 @@ export const seedEvents = () => {
   }
 
   set(EVENTS_KEY, Array.from(byId.values()));
+  seedDemoData();
+};
+
+export const seedDemoData = () => {
+  const feedbacks = getFeedback();
+  if (feedbacks.length === 0) {
+    const v1: Volunteer = {
+      id: 'vol-1', name: 'Alice Smith', email: 'alice@example.com', phone: '9876543210', city: 'Mumbai', cause: 'Environment', experience: 'Intermediate (1-3 years)', idType: 'Aadhaar Card', availability: ['Weekends'], registeredAt: new Date(Date.now() - 30 * 86400000).toISOString()
+    };
+    const v2: Volunteer = {
+      id: 'vol-2', name: 'Bob Jones', email: 'bob@example.com', phone: '9876543211', city: 'Pune', cause: 'Education', experience: 'No Experience', idType: 'Voter ID', availability: ['Weekdays'], registeredAt: new Date(Date.now() - 20 * 86400000).toISOString()
+    };
+    const v3: Volunteer = {
+      id: 'vol-3', name: 'Charlie Doe', email: 'charlie@example.com', phone: '9876543212', city: 'Nashik', cause: 'Healthcare', experience: 'Expert (3+ years)', idType: 'Passport', availability: ['Weekends', 'Evenings'], registeredAt: new Date(Date.now() - 10 * 86400000).toISOString()
+    };
+    set(VOLUNTEERS_KEY, [v1, v2, v3]);
+    
+    const regs: EventRegistration[] = [
+      { id: 'reg-1', eventId: 'evt-4', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 25 * 86400000).toISOString(), certificateGenerated: true },
+      { id: 'reg-2', eventId: 'evt-5', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 15 * 86400000).toISOString(), certificateGenerated: false },
+      { id: 'reg-3', eventId: 'evt-9', volunteerId: 'vol-2', registeredAt: new Date(Date.now() - 12 * 86400000).toISOString(), certificateGenerated: true },
+      { id: 'reg-4', eventId: 'evt-10', volunteerId: 'vol-3', registeredAt: new Date(Date.now() - 18 * 86400000).toISOString(), certificateGenerated: true },
+      { id: 'reg-5', eventId: 'evt-10', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 18 * 86400000).toISOString(), certificateGenerated: true },
+    ];
+    set(REGISTRATIONS_KEY, regs);
+    
+    const feedbacks: EventFeedback[] = [
+      { id: 'fb-1', eventId: 'evt-4', volunteerId: 'vol-1', rating: 5, comment: 'Amazing experience! the shelter animals were adorable.', submittedAt: new Date(Date.now() - 4 * 86400000).toISOString() },
+      { id: 'fb-2', eventId: 'evt-5', volunteerId: 'vol-1', rating: 4, comment: 'Great initiative. Need more shovels next time.', submittedAt: new Date(Date.now() - 1 * 86400000).toISOString() },
+      { id: 'fb-3', eventId: 'evt-9', volunteerId: 'vol-2', rating: 5, comment: 'People were very receptive to the safety rules.', submittedAt: new Date(Date.now() - 8 * 86400000).toISOString() },
+      { id: 'fb-4', eventId: 'evt-10', volunteerId: 'vol-3', rating: 5, comment: 'Very fulfilling to spend time at the old age home.', submittedAt: new Date(Date.now() - 14 * 86400000).toISOString() },
+      { id: 'fb-5', eventId: 'evt-10', volunteerId: 'vol-1', rating: 3, comment: 'Good event, but it was slightly unorganized at the start.', submittedAt: new Date(Date.now() - 13 * 86400000).toISOString() },
+    ];
+    set(FEEDBACK_KEY, feedbacks);
+  }
 };

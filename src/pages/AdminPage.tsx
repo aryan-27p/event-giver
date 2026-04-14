@@ -4,22 +4,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getEvents, getVolunteers, getRegistrations, addEvent, deleteEvent } from '@/lib/store';
+import { getEvents, getVolunteers, getRegistrations, addEvent, deleteEvent, getFeedback } from '@/lib/store';
 import { generateCertificate } from '@/lib/certificate';
 import { CAUSES } from '@/lib/types';
-import type { VolunteerEvent, Volunteer, EventRegistration } from '@/lib/types';
-import { Plus, Trash2, Users, Calendar, Award, ShieldCheck } from 'lucide-react';
+import type { VolunteerEvent, Volunteer, EventRegistration, EventFeedback } from '@/lib/types';
+import { Plus, Trash2, Users, Calendar, Award, ShieldCheck, MessageSquare, Star } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function AdminPage() {
   const [events, setEvents] = useState<VolunteerEvent[]>([]);
   const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
   const [registrations, setRegistrations] = useState<EventRegistration[]>([]);
-  const [form, setForm] = useState({ name: '', description: '', location: '', cause: '', eventDate: '', registrationDeadline: '' });
+  const [feedbacks, setFeedbacks] = useState<EventFeedback[]>([]);
+  const [form, setForm] = useState({ name: '', description: '', location: '', cause: '', organizerName: '', eventDate: '', registrationDeadline: '' });
 
   const refresh = () => {
     setEvents(getEvents());
     setVolunteers(getVolunteers());
     setRegistrations(getRegistrations());
+    setFeedbacks(getFeedback());
   };
 
   useEffect(refresh, []);
@@ -37,7 +40,7 @@ export default function AdminPage() {
       registrationDeadline: new Date(form.registrationDeadline).toISOString(),
       createdAt: new Date().toISOString(),
     });
-    setForm({ name: '', description: '', location: '', cause: '', eventDate: '', registrationDeadline: '' });
+    setForm({ name: '', description: '', location: '', cause: '', organizerName: '', eventDate: '', registrationDeadline: '' });
     toast.success('Event created! 🎉');
     refresh();
   };
@@ -48,11 +51,11 @@ export default function AdminPage() {
     refresh();
   };
 
-  const handleGenCert = (reg: EventRegistration) => {
+  const handleGenCert = async (reg: EventRegistration) => {
     const vol = volunteers.find(v => v.id === reg.volunteerId);
     const evt = events.find(e => e.id === reg.eventId);
     if (vol && evt) {
-      generateCertificate(vol.name, evt.name, evt.eventDate);
+      await generateCertificate(vol.name, evt.name, evt.eventDate);
       toast.success(`Certificate generated for ${vol.name}`);
     }
   };
@@ -72,11 +75,12 @@ export default function AdminPage() {
         </div>
 
         <Tabs defaultValue="create" className="mx-auto max-w-4xl">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="create"><Plus className="mr-1 h-4 w-4 hidden sm:inline" />Create</TabsTrigger>
             <TabsTrigger value="events"><Calendar className="mr-1 h-4 w-4 hidden sm:inline" />Events</TabsTrigger>
-            <TabsTrigger value="volunteers"><Users className="mr-1 h-4 w-4 hidden sm:inline" />Volunteers</TabsTrigger>
-            <TabsTrigger value="registrations"><Award className="mr-1 h-4 w-4 hidden sm:inline" />Registrations</TabsTrigger>
+            <TabsTrigger value="volunteers"><Users className="mr-1 h-4 w-4 hidden sm:inline" />Vols</TabsTrigger>
+            <TabsTrigger value="registrations"><Award className="mr-1 h-4 w-4 hidden sm:inline" />Regs</TabsTrigger>
+            <TabsTrigger value="reviews"><MessageSquare className="mr-1 h-4 w-4 hidden sm:inline" />Reviews</TabsTrigger>
           </TabsList>
 
           <TabsContent value="create" className="mt-6">
@@ -92,9 +96,15 @@ export default function AdminPage() {
                   <Input placeholder="Location" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label>Description</Label>
-                <textarea className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" placeholder="Event description" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label>Description</Label>
+                  <textarea className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" placeholder="Event description" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Organizer NGO Name</Label>
+                  <Input placeholder="NGO Name" value={form.organizerName} onChange={e => setForm(f => ({ ...f, organizerName: e.target.value }))} />
+                </div>
               </div>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-2">
@@ -127,7 +137,7 @@ export default function AdminPage() {
                 <div key={evt.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 shadow-card">
                   <div>
                     <h4 className="font-heading font-semibold text-foreground">{evt.name}</h4>
-                    <p className="text-xs text-muted-foreground">{evt.location} • {evt.cause} • {new Date(evt.eventDate).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">{evt.location} • {evt.cause} • {new Date(evt.eventDate).toLocaleDateString()} • Org: {evt.organizerName || 'Unknown'}</p>
                   </div>
                   <Button variant="destructive" size="sm" onClick={() => handleDelete(evt.id)}>
                     <Trash2 className="h-4 w-4" />
@@ -168,6 +178,49 @@ export default function AdminPage() {
                   </Button>
                 </div>
               ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="reviews" className="mt-6">
+            <div className="space-y-6">
+              <div className="rounded-xl border border-border bg-card p-6 shadow-card h-[300px]">
+                <h3 className="font-heading text-lg font-semibold mb-4">Average Ratings per Event</h3>
+                {events.length > 0 && feedbacks.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={events.map(evt => {
+                      const evFbs = feedbacks.filter(f => f.eventId === evt.id);
+                      const avg = evFbs.length ? evFbs.reduce((a,c) => a + c.rating, 0) / evFbs.length : 0;
+                      return { name: evt.name.substring(0, 15)+'...', rating: Number(avg.toFixed(1)), count: evFbs.length };
+                    }).filter(d => d.count > 0)}>
+                      <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                      <Tooltip cursor={{fill: 'var(--muted)'}} />
+                      <Bar dataKey="rating" fill="rgba(34, 139, 94, 0.8)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <p className="text-center text-muted-foreground mt-10">No event review data available.</p>
+                )}
+              </div>
+              
+              <div className="space-y-3">
+                <h3 className="font-heading text-lg font-semibold">Latest Feedback Comments</h3>
+                {feedbacks.length === 0 ? (
+                  <p className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground shadow-card">No feedback received yet.</p>
+                ) : [...feedbacks].reverse().map(fb => (
+                  <div key={fb.id} className="rounded-xl border border-border bg-card p-4 shadow-card">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-foreground flex items-center gap-2">
+                        {getEventName(fb.eventId)} 
+                        <span className="flex items-center text-yellow-500 text-sm"><Star className="w-3 h-3 fill-yellow-500 mr-1"/> {fb.rating}/5</span>
+                      </h4>
+                      <span className="text-xs text-muted-foreground">{new Date(fb.submittedAt).toLocaleDateString()}</span>
+                    </div>
+                    <p className="text-sm text-foreground italic">"{fb.comment || 'No comment provided.'}"</p>
+                    <p className="text-xs text-muted-foreground mt-2 text-right">- {getVolunteerName(fb.volunteerId)}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </TabsContent>
         </Tabs>

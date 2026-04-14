@@ -11,6 +11,8 @@ import HistoryPage from "./pages/HistoryPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 import SqlViewer from "./pages/SqlViewer";
+import ProfilePage from "./pages/ProfilePage";
+import { ThemeProvider } from "./components/theme-provider";
 import { seedEvents } from "./lib/store";
 
 seedEvents();
@@ -18,17 +20,19 @@ seedEvents();
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
+  <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/sql-viewer" element={<SqlViewer />} />
           <Route path="*" element={<NotFound />} />
@@ -36,6 +40,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;

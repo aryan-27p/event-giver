@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, Menu, X, LogOut } from 'lucide-react';
+import { Heart, Menu, X, LogOut, UserRound } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Navbar() {
   const location = useLocation();
@@ -26,6 +27,7 @@ export default function Navbar() {
     { label: 'Register', path: '/register' },
     { label: 'Events', path: '/events' },
     { label: 'History', path: '/history' },
+    { label: 'Profile', path: '/profile' },
   ];
 
   const ngoNav = [
@@ -78,12 +80,18 @@ export default function Navbar() {
               Switch Role
             </button>
           )}
+          <div className="ml-2">
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden p-2 rounded-lg hover:bg-muted" onClick={() => setOpen(!open)}>
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
+          <button className="p-2 rounded-lg hover:bg-muted" onClick={() => setOpen(!open)}>
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
