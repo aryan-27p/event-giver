@@ -112,23 +112,23 @@ export const seedEvents = () => {
     },
     {
       id: 'evt-4', name: 'Animal Shelter Support', description: 'Help feed, groom, and care for rescued animals at the local shelter.',
-      location: 'City Animal Shelter, Nashik, Maharashtra', cause: 'Animal Welfare', eventDate: new Date(now.getTime() - 5 * 86400000).toISOString(),
-      registrationDeadline: new Date(now.getTime() - 10 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 30 * 86400000).toISOString(),
+      location: 'City Animal Shelter, Nashik, Maharashtra', cause: 'Animal Welfare', eventDate: new Date(now.getTime() - 110 * 86400000).toISOString(),
+      registrationDeadline: new Date(now.getTime() - 115 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 120 * 86400000).toISOString(),
     },
     {
       id: 'evt-5', name: 'Tree Plantation Drive', description: 'Plant trees and contribute to a greener future for our community.',
-      location: 'Central Park, Thane, Maharashtra', cause: 'Environment', eventDate: new Date(now.getTime() - 2 * 86400000).toISOString(),
-      registrationDeadline: new Date(now.getTime() - 7 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 20 * 86400000).toISOString(),
+      location: 'Central Park, Thane, Maharashtra', cause: 'Environment', eventDate: new Date(now.getTime() - 95 * 86400000).toISOString(),
+      registrationDeadline: new Date(now.getTime() - 100 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 105 * 86400000).toISOString(),
     },
     {
       id: 'evt-9', name: 'Road Safety Awareness Rally', description: 'Distribute pamphlets and guide commuters on road safety rules.',
-      location: 'MG Road, Pune, Maharashtra', cause: 'Community Development', eventDate: new Date(now.getTime() - 9 * 86400000).toISOString(),
-      registrationDeadline: new Date(now.getTime() - 12 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 25 * 86400000).toISOString(),
+      location: 'MG Road, Pune, Maharashtra', cause: 'Community Development', eventDate: new Date(now.getTime() - 80 * 86400000).toISOString(),
+      registrationDeadline: new Date(now.getTime() - 85 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 90 * 86400000).toISOString(),
     },
     {
       id: 'evt-10', name: 'Old Age Home Visit', description: 'Spend time with elders, organize games, and provide companionship.',
-      location: 'Old Age Home, Navi Mumbai, Maharashtra', cause: 'Elder Care', eventDate: new Date(now.getTime() - 15 * 86400000).toISOString(),
-      registrationDeadline: new Date(now.getTime() - 18 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 35 * 86400000).toISOString(),
+      location: 'Old Age Home, Navi Mumbai, Maharashtra', cause: 'Elder Care', eventDate: new Date(now.getTime() - 60 * 86400000).toISOString(),
+      registrationDeadline: new Date(now.getTime() - 65 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 70 * 86400000).toISOString(),
     },
     {
       id: 'evt-11', name: 'Heritage Fort Cleanup', description: 'Help preserve history by cleaning the surroundings of the iconic Shaniwar Wada.',
@@ -152,8 +152,8 @@ export const seedEvents = () => {
     },
     {
       id: 'evt-15', name: 'Farmers Support Helpline Drive', description: 'Raise awareness about government schemes and mental health support for farmers.',
-      location: 'Agricultural Market Yard, Sangli, Maharashtra', cause: 'Community Development', eventDate: new Date(now.getTime() - 4 * 86400000).toISOString(),
-      registrationDeadline: new Date(now.getTime() - 6 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 20 * 86400000).toISOString(),
+      location: 'Agricultural Market Yard, Sangli, Maharashtra', cause: 'Community Development', eventDate: new Date(now.getTime() - 50 * 86400000).toISOString(),
+      registrationDeadline: new Date(now.getTime() - 55 * 86400000).toISOString(), createdAt: new Date(now.getTime() - 60 * 86400000).toISOString(),
     },
   ];
   const seedEvents: VolunteerEvent[] = seedData.map(e => ({ ...e, organizerName: 'Volunteer Connect' as string }));
@@ -188,31 +188,31 @@ export const seedDemoData = () => {
   const feedbacks = getFeedback();
   if (feedbacks.length === 0) {
     const v1: Volunteer = {
-      id: 'vol-1', name: 'Alice Smith', email: 'alice@example.com', phone: '9876543210', city: 'Mumbai', cause: 'Environment', experience: 'Intermediate (1-3 years)', idType: 'Aadhaar Card', availability: ['Weekends'], registeredAt: new Date(Date.now() - 30 * 86400000).toISOString()
+      id: 'vol-1', name: 'Alice Smith', email: 'alice@example.com', phone: '9876543210', city: 'Mumbai', cause: 'Environment', experience: 'Intermediate (1-3 years)', idType: 'Aadhaar Card', availability: ['Weekends'], registeredAt: new Date(Date.now() - 130 * 86400000).toISOString()
     };
     const v2: Volunteer = {
-      id: 'vol-2', name: 'Bob Jones', email: 'bob@example.com', phone: '9876543211', city: 'Pune', cause: 'Education', experience: 'No Experience', idType: 'Voter ID', availability: ['Weekdays'], registeredAt: new Date(Date.now() - 20 * 86400000).toISOString()
+      id: 'vol-2', name: 'Bob Jones', email: 'bob@example.com', phone: '9876543211', city: 'Pune', cause: 'Education', experience: 'No Experience', idType: 'Voter ID', availability: ['Weekdays'], registeredAt: new Date(Date.now() - 100 * 86400000).toISOString()
     };
     const v3: Volunteer = {
-      id: 'vol-3', name: 'Charlie Doe', email: 'charlie@example.com', phone: '9876543212', city: 'Nashik', cause: 'Healthcare', experience: 'Expert (3+ years)', idType: 'Passport', availability: ['Weekends', 'Evenings'], registeredAt: new Date(Date.now() - 10 * 86400000).toISOString()
+      id: 'vol-3', name: 'Charlie Doe', email: 'charlie@example.com', phone: '9876543212', city: 'Nashik', cause: 'Healthcare', experience: 'Expert (3+ years)', idType: 'Passport', availability: ['Weekends', 'Evenings'], registeredAt: new Date(Date.now() - 80 * 86400000).toISOString()
     };
     set(VOLUNTEERS_KEY, [v1, v2, v3]);
     
     const regs: EventRegistration[] = [
-      { id: 'reg-1', eventId: 'evt-4', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 25 * 86400000).toISOString(), certificateGenerated: true },
-      { id: 'reg-2', eventId: 'evt-5', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 15 * 86400000).toISOString(), certificateGenerated: false },
-      { id: 'reg-3', eventId: 'evt-9', volunteerId: 'vol-2', registeredAt: new Date(Date.now() - 12 * 86400000).toISOString(), certificateGenerated: true },
-      { id: 'reg-4', eventId: 'evt-10', volunteerId: 'vol-3', registeredAt: new Date(Date.now() - 18 * 86400000).toISOString(), certificateGenerated: true },
-      { id: 'reg-5', eventId: 'evt-10', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 18 * 86400000).toISOString(), certificateGenerated: true },
+      { id: 'reg-1', eventId: 'evt-4', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 115 * 86400000).toISOString(), certificateGenerated: true },
+      { id: 'reg-2', eventId: 'evt-5', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 100 * 86400000).toISOString(), certificateGenerated: false },
+      { id: 'reg-3', eventId: 'evt-9', volunteerId: 'vol-2', registeredAt: new Date(Date.now() - 85 * 86400000).toISOString(), certificateGenerated: true },
+      { id: 'reg-4', eventId: 'evt-10', volunteerId: 'vol-3', registeredAt: new Date(Date.now() - 65 * 86400000).toISOString(), certificateGenerated: true },
+      { id: 'reg-5', eventId: 'evt-10', volunteerId: 'vol-1', registeredAt: new Date(Date.now() - 65 * 86400000).toISOString(), certificateGenerated: true },
     ];
     set(REGISTRATIONS_KEY, regs);
     
     const feedbacks: EventFeedback[] = [
-      { id: 'fb-1', eventId: 'evt-4', volunteerId: 'vol-1', rating: 5, comment: 'Amazing experience! the shelter animals were adorable.', submittedAt: new Date(Date.now() - 4 * 86400000).toISOString() },
-      { id: 'fb-2', eventId: 'evt-5', volunteerId: 'vol-1', rating: 4, comment: 'Great initiative. Need more shovels next time.', submittedAt: new Date(Date.now() - 1 * 86400000).toISOString() },
-      { id: 'fb-3', eventId: 'evt-9', volunteerId: 'vol-2', rating: 5, comment: 'People were very receptive to the safety rules.', submittedAt: new Date(Date.now() - 8 * 86400000).toISOString() },
-      { id: 'fb-4', eventId: 'evt-10', volunteerId: 'vol-3', rating: 5, comment: 'Very fulfilling to spend time at the old age home.', submittedAt: new Date(Date.now() - 14 * 86400000).toISOString() },
-      { id: 'fb-5', eventId: 'evt-10', volunteerId: 'vol-1', rating: 3, comment: 'Good event, but it was slightly unorganized at the start.', submittedAt: new Date(Date.now() - 13 * 86400000).toISOString() },
+      { id: 'fb-1', eventId: 'evt-4', volunteerId: 'vol-1', rating: 5, comment: 'Amazing experience! the shelter animals were adorable.', submittedAt: new Date(Date.now() - 105 * 86400000).toISOString() },
+      { id: 'fb-2', eventId: 'evt-5', volunteerId: 'vol-1', rating: 4, comment: 'Great initiative. Need more shovels next time.', submittedAt: new Date(Date.now() - 90 * 86400000).toISOString() },
+      { id: 'fb-3', eventId: 'evt-9', volunteerId: 'vol-2', rating: 5, comment: 'People were very receptive to the safety rules.', submittedAt: new Date(Date.now() - 75 * 86400000).toISOString() },
+      { id: 'fb-4', eventId: 'evt-10', volunteerId: 'vol-3', rating: 5, comment: 'Very fulfilling to spend time at the old age home.', submittedAt: new Date(Date.now() - 55 * 86400000).toISOString() },
+      { id: 'fb-5', eventId: 'evt-10', volunteerId: 'vol-1', rating: 3, comment: 'Good event, but it was slightly unorganized at the start.', submittedAt: new Date(Date.now() - 55 * 86400000).toISOString() },
     ];
     set(FEEDBACK_KEY, feedbacks);
   }
